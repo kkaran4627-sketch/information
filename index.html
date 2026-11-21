@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>India Info Hub</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121e31;--line:#26364d;--muted:#9aabc2;--accent:#54d6b0;--blue:#7ba7ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#18334a 0,transparent 35%),var(--bg);color:#f3f7ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{padding:28px 18px 18px;text-align:center}header .logo{font-size:34px}h1{margin:5px 0;font-size:clamp(25px,5vw,38px)}header p{color:var(--muted);margin:6px auto;max-width:600px}
+main{width:min(900px,calc(100% - 28px));margin:18px auto 50px}.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tab{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--panel);color:#fff;text-align:left;cursor:pointer;transition:.2s}
+.tab.active{border-color:var(--accent);box-shadow:0 0 0 1px #54d6b055;background:#172b3b}.tab b{display:block;font-size:17px}.tab small{display:block;color:var(--muted);margin-top:4px}
+.panel{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+label{display:block;font-weight:650;margin-bottom:9px}.inputrow{display:flex;gap:10px}
+input{min-width:0;flex:1;background:#0b1423;color:white;border:1px solid #34465f;border-radius:12px;padding:14px;font-size:16px;outline:none}
+input:focus{border-color:var(--accent)}button.search{border:0;border-radius:12px;padding:0 22px;background:var(--accent);color:#06251e;font-weight:800;font-size:15px;cursor:pointer}
+.hint{color:var(--muted);font-size:13px;margin:10px 0 0}.status{margin-top:16px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.result{margin-top:15px;background:#0b1423;border:1px solid var(--line);border-radius:13px;padding:14px;overflow:auto}
+.result pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.55}
+.notice{margin-top:16px;padding:13px 15px;border-radius:12px;background:#302719;border:1px solid #67502a;color:#f2d9a8;font-size:13px;line-height:1.5}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:0 15px 30px}
+@media(max-width:520px){.tabs{grid-template-columns:1fr 1fr}.tab{padding:14px}.panel{padding:17px}.inputrow{flex-direction:column}button.search{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✦</div>
+ <h1>India Info Hub</h1>
+ <p>Quick public information lookup</p>
+</header>
+<main>
+ <section class="tabs" aria-label="Lookup type">
+  <button class="tab active" data-kind="ifsc"><b>🏦 IFSC Lookup</b><small>Bank branch details</small></button>
+  <button class="tab" data-kind="pincode"><b>📍 Pincode Lookup</b><small>Post office details</small></button>
+ </section>
+ <section class="panel">
+  <label id="fieldLabel" for="query">Enter IFSC code</label>
+  <div class="inputrow">
+   <input id="query" autocomplete="off" placeholder="Example: SBIN0000001" maxlength="20">
+   <button class="search" id="searchBtn">Search</button>
+  </div>
+  <p class="hint" id="hint">Enter a bank IFSC code to look up public branch information.</p>
+  <div class="status" id="status" role="status" aria-live="polite">Choose a lookup type and enter a value.</div>
+  <div class="result" id="result" hidden><pre id="output"></pre></div>
+  <div class="notice">Only public IFSC and postal-code lookup is enabled here. This page does not retrieve Aadhaar, PAN, voter, ration-card, UPI-owner, or private vehicle-owner information.</div>
+ </section>
+</main>
+<footer>India Info Hub · Demo API integration</footer>
+<script>
+const API_BASE = "https://altaf-api-maker.base44.app/functions/lookup";
+const API_KEY = "Demo";
+let kind = "ifsc";
+const input = document.getElementById("query");
+const statusBox = document.getElementById("status");
+const resultBox = document.getElementById("result");
+const output = document.getElementById("output");
+
+function setKind(next){
+ kind = next;
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.kind===kind));
+ document.getElementById("fieldLabel").textContent = kind==="ifsc" ? "Enter IFSC code" : "Enter 6-digit PIN code";
+ input.placeholder = kind==="ifsc" ? "Example: SBIN0000001" : "Example: 110001";
+ input.maxLength = kind==="ifsc" ? 11 : 6;
+ input.value = "";
+ document.getElementById("hint").textContent = kind==="ifsc"
+  ? "Enter a bank IFSC code to look up public branch information."
+  : "Enter a 6-digit postal PIN code to look up post office information.";
+ statusBox.textContent = "Ready to search.";
+ resultBox.hidden = true;
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setKind(b.dataset.kind)));
+
+async function search(){
+ const q = input.value.trim().toUpperCase();
+ if(!q){statusBox.textContent="Please enter a value first.";resultBox.hidden=true;return;}
+ if(kind==="pincode" && !/^\d{6}$/.test(q)){statusBox.textContent="PIN code must contain exactly 6 digits.";resultBox.hidden=true;return;}
+ if(kind==="ifsc" && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(q)){statusBox.textContent="Please enter a valid-looking 11-character IFSC code.";resultBox.hidden=true;return;}
+ const url = new URL(API_BASE);
+ url.searchParams.set("tool",kind);
+ url.searchParams.set("key",API_KEY);
+ url.searchParams.set("q",q);
+ statusBox.textContent="Connecting to lookup API…";
+ resultBox.hidden=true;
+ document.getElementById("searchBtn").disabled=true;
+ try{
+  const response=await fetch(url.toString(),{method:"GET",headers:{Accept:"application/json"}});
+  const body=await response.text();
+  let data;
+  try{data=JSON.parse(body)}catch{data=body}
+  if(!response.ok) throw new Error("Server returned HTTP "+response.status+": "+(typeof data==="string"?data:JSON.stringify(data)));
+  output.textContent=typeof data==="string"?data:JSON.stringify(data,null,2);
+  resultBox.hidden=false;
+  statusBox.textContent="Response received.";
+ }catch(err){
+  statusBox.textContent="Could not complete the request.\n"+err.message+"\n\nIf this says Failed to fetch, the API may be offline or blocking browser requests (CORS).";
+ }finally{document.getElementById("searchBtn").disabled=false;}
+}
+document.getElementById("searchBtn").addEventListener("click",search);
+input.addEventListener("keydown",e=>{if(e.key==="Enter")search()});
+</script>
+</body>
+</html>
