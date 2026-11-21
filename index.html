@@ -1,104 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101827">
-<title>India Info Hub</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827"><title>India Info Dashboard</title>
 <style>
-:root{color-scheme:dark;--bg:#0b1220;--panel:#121e31;--line:#26364d;--muted:#9aabc2;--accent:#54d6b0;--blue:#7ba7ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#18334a 0,transparent 35%),var(--bg);color:#f3f7ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
-header{padding:28px 18px 18px;text-align:center}header .logo{font-size:34px}h1{margin:5px 0;font-size:clamp(25px,5vw,38px)}header p{color:var(--muted);margin:6px auto;max-width:600px}
-main{width:min(900px,calc(100% - 28px));margin:18px auto 50px}.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.tab{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--panel);color:#fff;text-align:left;cursor:pointer;transition:.2s}
-.tab.active{border-color:var(--accent);box-shadow:0 0 0 1px #54d6b055;background:#172b3b}.tab b{display:block;font-size:17px}.tab small{display:block;color:var(--muted);margin-top:4px}
-.panel{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
-label{display:block;font-weight:650;margin-bottom:9px}.inputrow{display:flex;gap:10px}
-input{min-width:0;flex:1;background:#0b1423;color:white;border:1px solid #34465f;border-radius:12px;padding:14px;font-size:16px;outline:none}
-input:focus{border-color:var(--accent)}button.search{border:0;border-radius:12px;padding:0 22px;background:var(--accent);color:#06251e;font-weight:800;font-size:15px;cursor:pointer}
-.hint{color:var(--muted);font-size:13px;margin:10px 0 0}.status{margin-top:16px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
-.result{margin-top:15px;background:#0b1423;border:1px solid var(--line);border-radius:13px;padding:14px;overflow:auto}
-.result pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.55}
-.notice{margin-top:16px;padding:13px 15px;border-radius:12px;background:#302719;border:1px solid #67502a;color:#f2d9a8;font-size:13px;line-height:1.5}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:0 15px 30px}
-@media(max-width:520px){.tabs{grid-template-columns:1fr 1fr}.tab{padding:14px}.panel{padding:17px}.inputrow{flex-direction:column}button.search{padding:14px}}
-</style>
-</head>
+:root{color-scheme:dark;--bg:#0a1220;--panel:#142238;--line:#2c405b;--muted:#a7b7cc;--a:#58dfb5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#254a61,transparent 55%),var(--bg);color:#f4f7fc;font:15px system-ui,Arial,sans-serif}
+header{text-align:center;padding:25px 14px 14px}header .ico{font-size:32px}h1{margin:3px 0;font-size:clamp(25px,5vw,36px)}header p{color:var(--muted);margin:4px}
+main{width:min(1000px,calc(100% - 24px));margin:16px auto 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.tab{background:var(--panel);color:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 11px;text-align:left;cursor:pointer;min-height:75px}
+.tab.active{border-color:var(--a);box-shadow:0 0 0 1px #58dfb544}.tab b{display:block;font-size:15px}.tab small{display:block;color:var(--muted);margin-top:4px;font-size:11px}
+.panel{margin-top:14px;padding:20px;border:1px solid var(--line);border-radius:17px;background:var(--panel)}
+.panel h2{margin:0 0 5px;font-size:21px}.desc{color:var(--muted);font-size:13px;margin:0 0 17px}
+label{display:block;font-weight:700;margin-bottom:8px}.entry{display:flex;gap:9px}
+input{flex:1;min-width:0;border:1px solid #405574;border-radius:10px;background:#0a1424;color:white;padding:13px;font-size:16px}
+button.go{border:0;border-radius:10px;background:var(--a);color:#06271e;padding:0 23px;font-weight:800;cursor:pointer}
+.status{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted);margin-top:15px;font-size:13px}
+.output{margin-top:12px;padding:13px;border-radius:11px;background:#081321;border:1px solid var(--line);overflow:auto}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:13px/1.55 ui-monospace,monospace}
+.notice{margin-top:14px;border:1px solid #66532e;background:#302719;color:#f2dcae;padding:12px;border-radius:10px;font-size:12px;line-height:1.5}
+button:disabled{opacity:.5;cursor:wait}
+@media(max-width:500px){.entry{flex-direction:column}button.go{padding:13px}.panel{padding:16px}}
+</style></head>
 <body>
-<header>
- <div class="logo">✦</div>
- <h1>India Info Hub</h1>
- <p>Quick public information lookup</p>
-</header>
+<header><div class="ico">✦</div><h1>India Info Dashboard</h1><p>अलग-अलग सेवाएँ, एक ही वेबसाइट पर</p></header>
 <main>
- <section class="tabs" aria-label="Lookup type">
-  <button class="tab active" data-kind="ifsc"><b>🏦 IFSC Lookup</b><small>Bank branch details</small></button>
-  <button class="tab" data-kind="pincode"><b>📍 Pincode Lookup</b><small>Post office details</small></button>
- </section>
+ <section class="grid" id="tabs"></section>
  <section class="panel">
-  <label id="fieldLabel" for="query">Enter IFSC code</label>
-  <div class="inputrow">
-   <input id="query" autocomplete="off" placeholder="Example: SBIN0000001" maxlength="20">
-   <button class="search" id="searchBtn">Search</button>
-  </div>
-  <p class="hint" id="hint">Enter a bank IFSC code to look up public branch information.</p>
-  <div class="status" id="status" role="status" aria-live="polite">Choose a lookup type and enter a value.</div>
-  <div class="result" id="result" hidden><pre id="output"></pre></div>
-  <div class="notice">Only public IFSC and postal-code lookup is enabled here. This page does not retrieve Aadhaar, PAN, voter, ration-card, UPI-owner, or private vehicle-owner information.</div>
+  <h2 id="title">IFSC Information</h2><p class="desc" id="desc">बैंक ब्रांच की सार्वजनिक जानकारी खोजें।</p>
+  <label id="label" for="q">IFSC Code</label>
+  <div class="entry"><input id="q" placeholder="उदाहरण: SBIN0000001" autocomplete="off"><button class="go" id="search">Search</button></div>
+  <div class="status" id="status" aria-live="polite">अपनी जानकारी डालकर Search दबाएँ।</div>
+  <div class="output" id="outbox" hidden><pre id="out"></pre></div>
+  <div class="notice">निजी पहचान/खाता/वाहन-मालिक डेटा (Aadhaar, PAN, Voter, Ration, Family, LPG, UPI-owner और vehicle-owner) केवल वैध अनुमति, संबंधित व्यक्ति की सहमति और सुरक्षित अधिकृत backend के साथ ही उपलब्ध कराया जा सकता है। इस डेमो में उन निजी lookup calls को जानबूझकर सक्रिय नहीं किया गया है।</div>
  </section>
 </main>
-<footer>India Info Hub · Demo API integration</footer>
 <script>
-const API_BASE = "https://altaf-api-maker.base44.app/functions/lookup";
-const API_KEY = "Demo";
-let kind = "ifsc";
-const input = document.getElementById("query");
-const statusBox = document.getElementById("status");
-const resultBox = document.getElementById("result");
-const output = document.getElementById("output");
-
-function setKind(next){
- kind = next;
- document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.kind===kind));
- document.getElementById("fieldLabel").textContent = kind==="ifsc" ? "Enter IFSC code" : "Enter 6-digit PIN code";
- input.placeholder = kind==="ifsc" ? "Example: SBIN0000001" : "Example: 110001";
- input.maxLength = kind==="ifsc" ? 11 : 6;
- input.value = "";
- document.getElementById("hint").textContent = kind==="ifsc"
-  ? "Enter a bank IFSC code to look up public branch information."
-  : "Enter a 6-digit postal PIN code to look up post office information.";
- statusBox.textContent = "Ready to search.";
- resultBox.hidden = true;
+const services=[
+ {id:"ifsc",name:"IFSC Info",title:"IFSC Information",label:"IFSC Code",placeholder:"SBIN0000001",desc:"बैंक और ब्रांच की सार्वजनिक जानकारी।",active:true},
+ {id:"pincode",name:"Pincode Info",title:"PIN Code Information",label:"6-digit PIN Code",placeholder:"110001",desc:"पोस्ट ऑफिस, जिला और राज्य की सार्वजनिक जानकारी।",active:true},
+ {id:"voter",name:"Voter Info",title:"Voter Information",label:"Voter lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"अधिकृत, सहमति-आधारित integration आवश्यक।"},
+ {id:"ration",name:"Ration Info",title:"Ration Information",label:"Ration lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"अधिकृत, सहमति-आधारित integration आवश्यक।"},
+ {id:"upi2info",name:"UPI Info",title:"UPI Information",label:"UPI ID",placeholder:"name@bank",desc:"UPI ID की सार्वजनिक/गैर-संवेदनशील validation के लिए अधिकृत provider आवश्यक।"},
+ {id:"pan",name:"PAN Info",title:"PAN Information",label:"PAN lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"अधिकृत, सहमति-आधारित integration आवश्यक।"},
+ {id:"veh-2-info",name:"Vehicle Info",title:"Vehicle Information",label:"Vehicle lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"वाहन-मालिक की निजी जानकारी के लिए अधिकृत access आवश्यक।"},
+ {id:"aadhar",name:"Aadhaar Info",title:"Aadhaar Information",label:"Aadhaar lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"Aadhaar lookup के लिए UIDAI-अनुमोदित व्यवस्था आवश्यक।"},
+ {id:"familyinfo",name:"Aadhaar Family",title:"Family Information",label:"Family lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"परिवार/पहचान डेटा का lookup सक्रिय नहीं है।"},
+ {id:"lpg",name:"LPG Info",title:"LPG Information",label:"LPG lookup input",placeholder:"यह निजी lookup सक्रिय नहीं है",desc:"उपभोक्ता/कनेक्शन डेटा के लिए अधिकृत provider आवश्यक।"}
+];
+let selected=services[0];
+const $=id=>document.getElementById(id);
+function renderTabs(){
+ $("tabs").innerHTML="";
+ services.forEach(s=>{
+  const b=document.createElement("button");b.className="tab"+(s.id===selected.id?" active":"");
+  const strong=document.createElement("b");strong.textContent=s.name;
+  const small=document.createElement("small");small.textContent=s.active?"Public lookup":"Authorized access";
+  b.append(strong,small);b.addEventListener("click",()=>select(s));$("tabs").append(b);
+ });
 }
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setKind(b.dataset.kind)));
-
-async function search(){
- const q = input.value.trim().toUpperCase();
- if(!q){statusBox.textContent="Please enter a value first.";resultBox.hidden=true;return;}
- if(kind==="pincode" && !/^\d{6}$/.test(q)){statusBox.textContent="PIN code must contain exactly 6 digits.";resultBox.hidden=true;return;}
- if(kind==="ifsc" && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(q)){statusBox.textContent="Please enter a valid-looking 11-character IFSC code.";resultBox.hidden=true;return;}
- const url = new URL(API_BASE);
- url.searchParams.set("tool",kind);
- url.searchParams.set("key",API_KEY);
- url.searchParams.set("q",q);
- statusBox.textContent="Connecting to lookup API…";
- resultBox.hidden=true;
- document.getElementById("searchBtn").disabled=true;
+function select(s){
+ selected=s;renderTabs();$("title").textContent=s.title;$("desc").textContent=s.desc;$("label").textContent=s.label;
+ $("q").placeholder=s.placeholder;$("q").value="";$("status").textContent=s.active?"अपनी जानकारी डालकर Search दबाएँ।":"इस सेक्शन के लिए निजी डेटा lookup सक्रिय नहीं है।";
+ $("outbox").hidden=true;$("search").disabled=!s.active;
+}
+async function run(){
+ const value=$("q").value.trim().toUpperCase();$("outbox").hidden=true;
+ if(!selected.active){$("status").textContent="यह निजी जानकारी वाला lookup है। इसे केवल वैध अनुमति और अधिकृत provider के साथ जोड़ा जा सकता है।";return;}
+ if(!value){$("status").textContent="पहले value डालें।";return;}
+ if(selected.id==="ifsc"&&!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(value)){$("status").textContent="11-character IFSC code डालें।";return;}
+ if(selected.id==="pincode"&&!/^\d{6}$/.test(value)){$("status").textContent="6 अंकों का PIN code डालें।";return;}
+ const btn=$("search");btn.disabled=true;$("status").textContent="Public data source से संपर्क हो रहा है…";
  try{
-  const response=await fetch(url.toString(),{method:"GET",headers:{Accept:"application/json"}});
-  const body=await response.text();
-  let data;
-  try{data=JSON.parse(body)}catch{data=body}
-  if(!response.ok) throw new Error("Server returned HTTP "+response.status+": "+(typeof data==="string"?data:JSON.stringify(data)));
-  output.textContent=typeof data==="string"?data:JSON.stringify(data,null,2);
-  resultBox.hidden=false;
-  statusBox.textContent="Response received.";
- }catch(err){
-  statusBox.textContent="Could not complete the request.\n"+err.message+"\n\nIf this says Failed to fetch, the API may be offline or blocking browser requests (CORS).";
- }finally{document.getElementById("searchBtn").disabled=false;}
+  const url=selected.id==="ifsc"?"https://ifsc.razorpay.com/"+encodeURIComponent(value):"https://api.postalpincode.in/pincode/"+encodeURIComponent(value);
+  const res=await fetch(url,{headers:{Accept:"application/json"}});
+  if(!res.ok)throw Error("HTTP "+res.status);
+  const data=await res.json();
+  if(selected.id==="pincode"&&(!data[0]||data[0].Status!=="Success"))throw Error("PIN code का रिकॉर्ड नहीं मिला।");
+  if(selected.id==="ifsc"&&data.Error)throw Error(data.Error);
+  $("out").textContent=JSON.stringify(data,null,2);$("outbox").hidden=false;$("status").textContent="डेटा मिल गया।";
+ }catch(e){$("status").textContent="Lookup असफल: "+e.message+"\nयदि Failed to fetch आए, तो source API की CORS/network अनुमति या server-side proxy की जरूरत हो सकती है।";}
+ finally{btn.disabled=false;}
 }
-document.getElementById("searchBtn").addEventListener("click",search);
-input.addEventListener("keydown",e=>{if(e.key==="Enter")search()});
-</script>
-</body>
-</html>
+$("search").addEventListener("click",run);$("q").addEventListener("keydown",e=>{if(e.key==="Enter")run()});
+renderTabs();select(selected);
+</script></body></html>
